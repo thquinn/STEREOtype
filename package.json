@@ -1,0 +1,19 @@
+{
+  "name": "stereotype",
+  "version": "1.0.0",
+  "description": "<a href=\"https://thquinn.itch.io/stereotype\">\r <div>\r   <img src =\"https://i.imgur.com/P6e1wLQ.png\" />\r   <p align=\"center\">A rhythm/typing game made in 48 hours for Ludum Dare 41</p>\r </div>\r </a>",
+  "main": "dictionary.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thquinn/STEREOtype.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thquinn/STEREOtype/issues"
+  },
+  "homepage": "https://github.com/thquinn/STEREOtype#readme"
+}

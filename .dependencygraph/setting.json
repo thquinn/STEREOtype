@@ -1,0 +1,13 @@
+{
+  "entryFilePath": "dictionary.js",
+  "alias": false,
+  "resolveExtensions": [
+    ".js",
+    ".jsx",
+    ".ts",
+    ".tsx",
+    ".vue",
+    ".scss",
+    ".less"
+  ]
+}
