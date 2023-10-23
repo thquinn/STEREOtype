@@ -27,6 +27,42 @@
 //		- Some reward for perfect words
 //		- Nicer-looking restart
 
+let lang = 'en';
+
+const messages = {
+	en: {
+			title: 'STEREOtype',
+			subtitle: 'by Tom Quinn for Ludum Dare 41',
+			description: 'type each word in time with the beat',
+			play: 'PLAY'
+	},
+	pt: {
+			title: 'STEREOtype',
+			subtitle: 'por Tom Quinn para Ludum Dare 41',
+			description: 'digite cada palavra no tempo da batida',
+			play: 'JOGAR'
+	},
+	dt: {
+			title: 'STEREOtyp',
+			subtitle: 'von Tom Quinn für Ludum Dare 41',
+			description: 'tippen Sie jedes Wort im Takt',
+			play: 'SPIELEN'
+	},
+	es: {
+			title: 'STEREOtype',
+			subtitle: 'por Tom Quinn para Ludum Dare 41',
+			description: 'escribe cada palabra al ritmo de la música',
+			play: 'JUGAR'
+	}
+};
+
+function updateLanguage(newLang) {
+	lang = newLang;
+	setup();
+}
+
+
+
 var canvas = document.getElementById('gameCanvas');
 canvas.width = 1920;
 canvas.height = 1080;
@@ -77,27 +113,27 @@ const GFX_UI_FAIL_BOX_SPACING = GFX_UI_FAIL_BOX_SIZE * 1.5;
 const GFX_UI_TIME_SIGNATURE_SCALING = 2;
 
 var kick = new Tone.MembraneSynth({
-	'pitchDecay' : 0.02,
-	'octaves' : 3,
-	'oscillator' : {
-		'type' : 'square4'
+	'pitchDecay': 0.02,
+	'octaves': 3,
+	'oscillator': {
+		'type': 'square4'
 	},
-	'envelope' : {
-		'attack' : 0.004,
-		'decay' : .15,
-		'sustain' : 0
+	'envelope': {
+		'attack': 0.004,
+		'decay': .15,
+		'sustain': 0
 	}
 }).toMaster();
 var hat = new Tone.MembraneSynth({
-	'pitchDecay' : 0.01,
-	'octaves' : 4,
-	'oscillator' : {
-		'type' : 'triangle'
+	'pitchDecay': 0.01,
+	'octaves': 4,
+	'oscillator': {
+		'type': 'triangle'
 	},
-	'envelope' : {
-		'attack' : 0.001,
-		'decay' : 0.2,
-		'sustain' : 0
+	'envelope': {
+		'attack': 0.001,
+		'decay': 0.2,
+		'sustain': 0
 	}
 }).toMaster();
 var autoPanner = new Tone.AutoPanner({
@@ -105,46 +141,47 @@ var autoPanner = new Tone.AutoPanner({
 	'depth': .5,
 }).toMaster().start();
 var synth = new Tone.Synth({
-  oscillator: {
-    type: "amsquare2",
-    detune: 0.1,
-    count: 5,
-  },
-  envelope: {
-    attack: 0.05,
-    decay: 0.5,
-    sustain: 0.025,
-    release: 0.2
-  }
+	oscillator: {
+		type: "amsquare2",
+		detune: 0.1,
+		count: 5,
+	},
+	envelope: {
+		attack: 0.05,
+		decay: 0.5,
+		sustain: 0.025,
+		release: 0.2
+	}
 }).connect(autoPanner);
 var bass = new Tone.FMSynth({
-	"harmonicity" : 1.001,
-	"modulationIndex" : 1.5,
-	"carrier" : {
-		"oscillator" : {
-			"type" : "sine"
+	"harmonicity": 1.001,
+	"modulationIndex": 1.5,
+	"carrier": {
+		"oscillator": {
+			"type": "sine"
 		},
-		"envelope" : {
-			"attack" : 2,
-			"decay" : 1,
-			"sustain" : 0.1,
+		"envelope": {
+			"attack": 2,
+			"decay": 1,
+			"sustain": 0.1,
 		},
 	},
-	"modulator" : {
-		"oscillator" : {
-			"type" : "fatsine"
+	"modulator": {
+		"oscillator": {
+			"type": "fatsine"
 		},
-		"envelope" : {
-			"attack" : 2,
-			"decay" : 2,
-			"sustain" : 2,
-			"release" : 0.01
+		"envelope": {
+			"attack": 2,
+			"decay": 2,
+			"sustain": 2,
+			"release": 0.01
 		},
 	}
 }).toMaster();
 Tone.Transport.loop = true;
 
 var score, words, scale;
+
 
 //this function is called right before the scheduled time
 function triggerKick(t) {
@@ -182,14 +219,14 @@ class Pattern {
 			let beat = this.beats[i];
 			Tone.Transport.schedule(triggerKick, '0:' + beat);
 			let note = scale[Math.randInt(0, scale.length)] + '3';
-			Tone.Transport.schedule(function(t){
+			Tone.Transport.schedule(function (t) {
 				if (score > 0 || words[1].successCheck()) {
 					synth.triggerAttackRelease(note, '8n', t, .2);
 				}
 			}, '0:' + beat);
 		}
 		let note = scale[Math.randInt(0, scale.length)] + '2';
-		Tone.Transport.schedule(function(t){
+		Tone.Transport.schedule(function (t) {
 			if (score > 0 || words[1].successCheck()) {
 				bass.triggerAttackRelease(note, Tone.Transport.loopEnd - .25, t, 1.25);
 			}
@@ -226,7 +263,7 @@ class Pattern {
 		this.beats.splice(index, 1);
 		this.beats.push(newBeat);
 		this.beats.sort((a, b) => a - b);
-		this.resetEvents();	
+		this.resetEvents();
 	}
 	randomBeat() {
 		this.beats = randomBeatArray(this.beats.length, this.measureLength);
@@ -242,7 +279,7 @@ class Word {
 		} else {
 			let tries = 1000;
 			while ((this.value == null || usedWords.has(this.value)) && tries > 0) {
-				this.value = dictionary[letters][Math.randInt(0, dictionary[letters].length - 1)].toUpperCase();
+				this.value = dictionary[lang][letters][Math.randInt(0, dictionary[lang][letters].length - 1)].toUpperCase();
 				tries--;
 			}
 			usedWords.add(this.value);
@@ -374,19 +411,19 @@ class Rest {
 }
 class Tutorial {
 	constructor(measuresLeft) {
-		this.canvas = document.createElement('canvas');
-		this.canvas.width = canvas.width;
-		this.canvas.height = canvas.height / 4;
-		this.ctx = this.canvas.getContext('2d');
-		this.ctx.textAlign = 'left';
-		this.ctx.textBaseline = 'middle';
-		this.ctx.fillStyle = GFX_WORD_OVER_COLOR;
-		this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) / 2 + 'px Cambo';
-		this.ctx.fillText('STEREOtype', GFX_WORD_BOX_OFFSET_X, this.canvas.height * .25);
-		this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) / 8 + 'px Cambo';
-		this.ctx.fillText('by Tom Quinn for Ludum Dare 41', GFX_WORD_BOX_OFFSET_X, this.canvas.height * .45);
-		this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) / 4 + 'px Cambo';
-		this.ctx.fillText('type each word in time with the beat', GFX_WORD_BOX_OFFSET_X, this.canvas.height * .66);
+			this.canvas = document.createElement('canvas');
+			this.canvas.width = canvas.width;
+			this.canvas.height = canvas.height / 4;
+			this.ctx = this.canvas.getContext('2d');
+			this.ctx.textAlign = 'left';
+			this.ctx.textBaseline = 'middle';
+			this.ctx.fillStyle = GFX_WORD_OVER_COLOR;
+			this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) / 2 + 'px Cambo';
+			this.ctx.fillText(messages[lang].title, GFX_WORD_BOX_OFFSET_X, this.canvas.height * 0.25);
+			this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) / 8 + 'px Cambo';
+			this.ctx.fillText(messages[lang].subtitle, GFX_WORD_BOX_OFFSET_X, this.canvas.height * 0.45);
+			this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) / 4 + 'px Cambo';
+			this.ctx.fillText(messages[lang].description, GFX_WORD_BOX_OFFSET_X, this.canvas.height * 0.66);
 	}
 	keystroke() { }
 	finalize() { }
@@ -414,13 +451,13 @@ function setup() {
 	usedWords = new Set();
 	pattern = new Pattern(4);
 	words.push(new Word(pattern.beats.length));
-	words.push(new Word('PLAY'));
+	words.push(new Word(messages[lang].play));
 	words.push(new Tutorial());
 }
 
 function loop() {
 	window.requestAnimationFrame(loop);
-	
+
 	update();
 
 	// Draw.
@@ -644,20 +681,61 @@ function levelUp() {
 	}
 }
 
-window.addEventListener('keydown', function(e) {
+const typedLetters = [];
+const typedLettersDiv = document.getElementById('typed-letters'); // Elemento HTML para exibir as letras digitadas
+const wordDisplayDiv = document.getElementById('word-display'); // Elemento HTML para exibir a palavra
+const sound = new Tone.Synth().toDestination(); // Substitua Synth por outro instrumento se desejar
+
+window.addEventListener('keydown', function (e) {
 	if (e.keyCode < 65 || e.keyCode > 90)
-    	return;
-    let char = String.fromCharCode(e.keyCode).toUpperCase();
-    if (fails == GAME_MAX_FAILS) {
-    	if (char == 'RESTART'[restartCount]) {
+		return;
+
+	const char = String.fromCharCode(e.keyCode).toUpperCase();
+
+	if (fails == GAME_MAX_FAILS) {
+		if (char == 'RESTART'[restartCount]) {
 			restartCount++;
 			if (restartCount == 7) {
 				setup();
 			}
 		}
-		return;
+	} else {
+		let word = words[1];
+		let beat = getClosestBeat(pattern.beats, Tone.Transport.position);
+		word.keystroke(beat.beat, char, beat.offset);
+		typedLetters.push(char);
+
+		// Atualiza o conteúdo do elemento HTML para exibir as letras digitadas.
+		if (typedLettersDiv) {
+			typedLettersDiv.textContent = typedLetters.join(' ');
+		}
+
+		// Atualiza o conteúdo do elemento HTML para exibir a palavra atual.
+		if (wordDisplayDiv) {
+			wordDisplayDiv.textContent = word; // Atualiza para a palavra correta
+		}
+		// Toca o mesmo som para todas as teclas pressionadas.
+		sound.triggerAttackRelease('C2', '8n'); // Configure a nota e duração desejadas.
 	}
-    let word = words[1];
-    let beat = getClosestBeat(pattern.beats, Tone.Transport.position);
-	word.keystroke(beat.beat, char, beat.offset);
 });
+
+// Função para mostrar o botão de "restart"
+function showRestartButton() {
+	const restartButton = document.getElementById('restart-button');
+	restartButton.style.display = 'block';
+  }
+  
+  // Verifica se o jogador perdeu e chame a função para mostrar o botão de "restart" 
+  if (jogadorPerdeu) {
+	showRestartButton();
+  }
+  
+  // Adiciona um manipulador de eventos ao botão de "restart"
+  const restartButton = document.getElementById('restart-button');
+  restartButton.addEventListener('click', () => {
+	// ## Adicionar aqui o código para reiniciar o jogo ##
+  });
+
+
+
+

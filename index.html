@@ -1,14 +1,28 @@
-<html style="background: #303030;">
-	<head>
-		<link href="https://fonts.googleapis.com/css?family=Cambo" rel="stylesheet">
-		<style> body { overflow:hidden; } #gameCanvas {  position: fixed; width: 1600px; height: 900px; top: 50%; left: 50%; transform: translate(-50%, -50%); } </style>
-	</head>
-	<body>
-		<canvas id='gameCanvas'></canvas>
-		asdasdasd
-	</body>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.0.1/Tone.min.js"></script>
-	<script type="text/javascript" src="dictionary.js"></script>
-	<script type="text/javascript" src="util.js"></script>
-	<script type="text/javascript" src="stereotype.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Cambo" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles.css"> <!-- Adiciona um arquivo CSS separado -->
+</head>
+<body>
+    <button id="restart-button" style="display: none">Restart</button>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; ">
+        <div style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 4px; gap: 10px;">
+            <button onclick="updateLanguage('en')" style=" background-color: #1D232C; color: #DDE1E8; border-radius: 4px; height: 24px;">English</button>
+            <button onclick="updateLanguage('pt')" style=" background-color: #1D232C; color: #DDE1E8; border-radius: 4px; height: 24px">Português</button>
+            <button onclick="updateLanguage('dt')" style=" background-color: #1D232C; color: #DDE1E8; border-radius: 4px; height: 24px">Deutsch</button>
+            <button onclick="updateLanguage('es')" style=" background-color: #1D232C; color: #DDE1E8; border-radius: 4px; height: 24px">Español</button>
+        </div>
+        <span>Projeto de Manutenção de software - Davidson e Karolaine - Utfpr-dv</span>
+    </div>
+    <canvas id='gameCanvas'></canvas>
+    <br>
+    
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.23/Tone.js"></script>
+<script type="module" src="Tonemin.js"></script>
+<script type="text/javascript" src="dictionary.js"></script>
+<script type="text/javascript" src="util.js"></script>
+<script type="text/javascript" src="stereotype.js"></script>
 </html>
+
