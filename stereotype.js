@@ -113,27 +113,27 @@ const GFX_UI_FAIL_BOX_SPACING = GFX_UI_FAIL_BOX_SIZE * 1.5;
 const GFX_UI_TIME_SIGNATURE_SCALING = 2;
 
 var kick = new Tone.MembraneSynth({
-	'pitchDecay' : 0.02,
-	'octaves' : 3,
-	'oscillator' : {
-		'type' : 'square4'
+	'pitchDecay': 0.02,
+	'octaves': 3,
+	'oscillator': {
+		'type': 'square4'
 	},
-	'envelope' : {
-		'attack' : 0.004,
-		'decay' : .15,
-		'sustain' : 0
+	'envelope': {
+		'attack': 0.004,
+		'decay': .15,
+		'sustain': 0
 	}
 }).toMaster();
 var hat = new Tone.MembraneSynth({
-	'pitchDecay' : 0.01,
-	'octaves' : 4,
-	'oscillator' : {
-		'type' : 'triangle'
+	'pitchDecay': 0.01,
+	'octaves': 4,
+	'oscillator': {
+		'type': 'triangle'
 	},
-	'envelope' : {
-		'attack' : 0.001,
-		'decay' : 0.2,
-		'sustain' : 0
+	'envelope': {
+		'attack': 0.001,
+		'decay': 0.2,
+		'sustain': 0
 	}
 }).toMaster();
 var autoPanner = new Tone.AutoPanner({
@@ -141,40 +141,40 @@ var autoPanner = new Tone.AutoPanner({
 	'depth': .5,
 }).toMaster().start();
 var synth = new Tone.Synth({
-  oscillator: {
-    type: "amsquare2",
-    detune: 0.1,
-    count: 5,
-  },
-  envelope: {
-    attack: 0.05,
-    decay: 0.5,
-    sustain: 0.025,
-    release: 0.2
-  }
+	oscillator: {
+		type: "amsquare2",
+		detune: 0.1,
+		count: 5,
+	},
+	envelope: {
+		attack: 0.05,
+		decay: 0.5,
+		sustain: 0.025,
+		release: 0.2
+	}
 }).connect(autoPanner);
 var bass = new Tone.FMSynth({
-	"harmonicity" : 1.001,
-	"modulationIndex" : 1.5,
-	"carrier" : {
-		"oscillator" : {
-			"type" : "sine"
+	"harmonicity": 1.001,
+	"modulationIndex": 1.5,
+	"carrier": {
+		"oscillator": {
+			"type": "sine"
 		},
-		"envelope" : {
-			"attack" : 2,
-			"decay" : 1,
-			"sustain" : 0.1,
+		"envelope": {
+			"attack": 2,
+			"decay": 1,
+			"sustain": 0.1,
 		},
 	},
-	"modulator" : {
-		"oscillator" : {
-			"type" : "fatsine"
+	"modulator": {
+		"oscillator": {
+			"type": "fatsine"
 		},
-		"envelope" : {
-			"attack" : 2,
-			"decay" : 2,
-			"sustain" : 2,
-			"release" : 0.01
+		"envelope": {
+			"attack": 2,
+			"decay": 2,
+			"sustain": 2,
+			"release": 0.01
 		},
 	}
 }).toMaster();
@@ -219,14 +219,14 @@ class Pattern {
 			let beat = this.beats[i];
 			Tone.Transport.schedule(triggerKick, '0:' + beat);
 			let note = scale[Math.randInt(0, scale.length)] + '3';
-			Tone.Transport.schedule(function(t){
+			Tone.Transport.schedule(function (t) {
 				if (score > 0 || words[1].successCheck()) {
 					synth.triggerAttackRelease(note, '8n', t, .2);
 				}
 			}, '0:' + beat);
 		}
 		let note = scale[Math.randInt(0, scale.length)] + '2';
-		Tone.Transport.schedule(function(t){
+		Tone.Transport.schedule(function (t) {
 			if (score > 0 || words[1].successCheck()) {
 				bass.triggerAttackRelease(note, Tone.Transport.loopEnd - .25, t, 1.25);
 			}
@@ -263,7 +263,7 @@ class Pattern {
 		this.beats.splice(index, 1);
 		this.beats.push(newBeat);
 		this.beats.sort((a, b) => a - b);
-		this.resetEvents();	
+		this.resetEvents();
 	}
 	randomBeat() {
 		this.beats = randomBeatArray(this.beats.length, this.measureLength);
@@ -457,7 +457,7 @@ function setup() {
 
 function loop() {
 	window.requestAnimationFrame(loop);
-	
+
 	update();
 
 	// Draw.
@@ -681,20 +681,61 @@ function levelUp() {
 	}
 }
 
-window.addEventListener('keydown', function(e) {
+const typedLetters = [];
+const typedLettersDiv = document.getElementById('typed-letters'); // Elemento HTML para exibir as letras digitadas
+const wordDisplayDiv = document.getElementById('word-display'); // Elemento HTML para exibir a palavra
+const sound = new Tone.Synth().toDestination(); // Substitua Synth por outro instrumento se desejar
+
+window.addEventListener('keydown', function (e) {
 	if (e.keyCode < 65 || e.keyCode > 90)
-    	return;
-    let char = String.fromCharCode(e.keyCode).toUpperCase();
-    if (fails == GAME_MAX_FAILS) {
-    	if (char == 'RESTART'[restartCount]) {
+		return;
+
+	const char = String.fromCharCode(e.keyCode).toUpperCase();
+
+	if (fails == GAME_MAX_FAILS) {
+		if (char == 'RESTART'[restartCount]) {
 			restartCount++;
 			if (restartCount == 7) {
 				setup();
 			}
 		}
-		return;
+	} else {
+		let word = words[1];
+		let beat = getClosestBeat(pattern.beats, Tone.Transport.position);
+		word.keystroke(beat.beat, char, beat.offset);
+		typedLetters.push(char);
+
+		// Atualiza o conteúdo do elemento HTML para exibir as letras digitadas.
+		if (typedLettersDiv) {
+			typedLettersDiv.textContent = typedLetters.join(' ');
+		}
+
+		// Atualiza o conteúdo do elemento HTML para exibir a palavra atual.
+		if (wordDisplayDiv) {
+			wordDisplayDiv.textContent = word; // Atualiza para a palavra correta
+		}
+		// Toca o mesmo som para todas as teclas pressionadas.
+		sound.triggerAttackRelease('C2', '8n'); // Configure a nota e duração desejadas.
 	}
-    let word = words[1];
-    let beat = getClosestBeat(pattern.beats, Tone.Transport.position);
-	word.keystroke(beat.beat, char, beat.offset);
 });
+
+// Função para mostrar o botão de "restart"
+function showRestartButton() {
+	const restartButton = document.getElementById('restart-button');
+	restartButton.style.display = 'block';
+  }
+  
+  // Verifica se o jogador perdeu e chame a função para mostrar o botão de "restart" 
+  if (jogadorPerdeu) {
+	showRestartButton();
+  }
+  
+  // Adiciona um manipulador de eventos ao botão de "restart"
+  const restartButton = document.getElementById('restart-button');
+  restartButton.addEventListener('click', () => {
+	// ## Adicionar aqui o código para reiniciar o jogo ##
+  });
+
+
+
+

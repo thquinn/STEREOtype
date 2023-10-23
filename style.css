@@ -1,0 +1,29 @@
+body {
+    overflow: hidden;
+    background: #89f4f4;
+    font-family: 'Cambo', sans-serif; /* Usar fonte personalizada */
+}
+
+#gameCanvas {
+    position: fixed;
+    width: 1600px;
+    height: 900px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#restart-button {
+    /* Adicione estilos personalizados para o botão de reinício */
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: none;
+}
+
+#restart-button:hover {
+    background-color: #45a049;
+}
