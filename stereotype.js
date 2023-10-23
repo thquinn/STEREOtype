@@ -650,38 +650,54 @@ const wordDisplayDiv = document.getElementById('word-display'); // Elemento HTML
 const sound = new Tone.Synth().toDestination(); // Substitua Synth por outro instrumento se desejar
 
 window.addEventListener('keydown', function (e) {
-    if (e.keyCode < 65 || e.keyCode > 90)
-        return;
+	if (e.keyCode < 65 || e.keyCode > 90)
+		return;
 
-    const char = String.fromCharCode(e.keyCode).toUpperCase();
+	const char = String.fromCharCode(e.keyCode).toUpperCase();
 
-    if (fails == GAME_MAX_FAILS) {
-        if (char == 'RESTART'[restartCount]) {
-            restartCount++;
-            if (restartCount == 7) {
-                setup();
-            }
-        }
-    } else {
-        let word = words[1];
-        let beat = getClosestBeat(pattern.beats, Tone.Transport.position);
-        word.keystroke(beat.beat, char, beat.offset);
-        typedLetters.push(char);
+	if (fails == GAME_MAX_FAILS) {
+		if (char == 'RESTART'[restartCount]) {
+			restartCount++;
+			if (restartCount == 7) {
+				setup();
+			}
+		}
+	} else {
+		let word = words[1];
+		let beat = getClosestBeat(pattern.beats, Tone.Transport.position);
+		word.keystroke(beat.beat, char, beat.offset);
+		typedLetters.push(char);
 
-        // Atualiza o conteúdo do elemento HTML para exibir as letras digitadas.
-        if (typedLettersDiv) {
-            typedLettersDiv.textContent = typedLetters.join(' ');
-        }
+		// Atualiza o conteúdo do elemento HTML para exibir as letras digitadas.
+		if (typedLettersDiv) {
+			typedLettersDiv.textContent = typedLetters.join(' ');
+		}
 
-        // Atualiza o conteúdo do elemento HTML para exibir a palavra atual.
-        if (wordDisplayDiv) {
-            wordDisplayDiv.textContent = word; // Atualiza para a palavra correta
-        }
-
-        // Toca o mesmo som para todas as teclas pressionadas.
-        sound.triggerAttackRelease('C2', '8n'); // Configure a nota e duração desejadas.
-    }
+		// Atualiza o conteúdo do elemento HTML para exibir a palavra atual.
+		if (wordDisplayDiv) {
+			wordDisplayDiv.textContent = word; // Atualiza para a palavra correta
+		}
+		// Toca o mesmo som para todas as teclas pressionadas.
+		sound.triggerAttackRelease('C2', '8n'); // Configure a nota e duração desejadas.
+	}
 });
+
+// Função para mostrar o botão de "restart"
+function showRestartButton() {
+	const restartButton = document.getElementById('restart-button');
+	restartButton.style.display = 'block';
+  }
+  
+  // Verifica se o jogador perdeu e chame a função para mostrar o botão de "restart" 
+  if (jogadorPerdeu) {
+	showRestartButton();
+  }
+  
+  // Adiciona um manipulador de eventos ao botão de "restart"
+  const restartButton = document.getElementById('restart-button');
+  restartButton.addEventListener('click', () => {
+	// ## Adicionar aqui o código para reiniciar o jogo ##
+  });
 
 
 
