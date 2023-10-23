@@ -27,6 +27,42 @@
 //		- Some reward for perfect words
 //		- Nicer-looking restart
 
+let lang = 'en';
+
+const messages = {
+	en: {
+			title: 'STEREOtype',
+			subtitle: 'by Tom Quinn for Ludum Dare 41',
+			description: 'type each word in time with the beat',
+			play: 'PLAY'
+	},
+	pt: {
+			title: 'STEREOtype',
+			subtitle: 'por Tom Quinn para Ludum Dare 41',
+			description: 'digite cada palavra no tempo da batida',
+			play: 'JOGAR'
+	},
+	dt: {
+			title: 'STEREOtyp',
+			subtitle: 'von Tom Quinn für Ludum Dare 41',
+			description: 'tippen Sie jedes Wort im Takt',
+			play: 'SPIELEN'
+	},
+	es: {
+			title: 'STEREOtype',
+			subtitle: 'por Tom Quinn para Ludum Dare 41',
+			description: 'escribe cada palabra al ritmo de la música',
+			play: 'JUGAR'
+	}
+};
+
+function updateLanguage(newLang) {
+	lang = newLang;
+	setup();
+}
+
+
+
 var canvas = document.getElementById('gameCanvas');
 canvas.width = 1920;
 canvas.height = 1080;
@@ -146,6 +182,7 @@ Tone.Transport.loop = true;
 
 var score, words, scale;
 
+
 //this function is called right before the scheduled time
 function triggerKick(t) {
 	//the time is the sample-accurate time of the event
@@ -242,7 +279,7 @@ class Word {
 		} else {
 			let tries = 1000;
 			while ((this.value == null || usedWords.has(this.value)) && tries > 0) {
-				this.value = dictionary[letters][Math.randInt(0, dictionary[letters].length - 1)].toUpperCase();
+				this.value = dictionary[lang][letters][Math.randInt(0, dictionary[lang][letters].length - 1)].toUpperCase();
 				tries--;
 			}
 			usedWords.add(this.value);
@@ -374,19 +411,19 @@ class Rest {
 }
 class Tutorial {
 	constructor(measuresLeft) {
-		this.canvas = document.createElement('canvas');
-		this.canvas.width = canvas.width;
-		this.canvas.height = canvas.height / 4;
-		this.ctx = this.canvas.getContext('2d');
-		this.ctx.textAlign = 'left';
-		this.ctx.textBaseline = 'middle';
-		this.ctx.fillStyle = GFX_WORD_OVER_COLOR;
-		this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) / 2 + 'px Cambo';
-		this.ctx.fillText('STEREOtype', GFX_WORD_BOX_OFFSET_X, this.canvas.height * .25);
-		this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) / 8 + 'px Cambo';
-		this.ctx.fillText('by Tom Quinn for Ludum Dare 41', GFX_WORD_BOX_OFFSET_X, this.canvas.height * .45);
-		this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) / 4 + 'px Cambo';
-		this.ctx.fillText('type each word in time with the beat', GFX_WORD_BOX_OFFSET_X, this.canvas.height * .66);
+			this.canvas = document.createElement('canvas');
+			this.canvas.width = canvas.width;
+			this.canvas.height = canvas.height / 4;
+			this.ctx = this.canvas.getContext('2d');
+			this.ctx.textAlign = 'left';
+			this.ctx.textBaseline = 'middle';
+			this.ctx.fillStyle = GFX_WORD_OVER_COLOR;
+			this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) / 2 + 'px Cambo';
+			this.ctx.fillText(messages[lang].title, GFX_WORD_BOX_OFFSET_X, this.canvas.height * 0.25);
+			this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) / 8 + 'px Cambo';
+			this.ctx.fillText(messages[lang].subtitle, GFX_WORD_BOX_OFFSET_X, this.canvas.height * 0.45);
+			this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) / 4 + 'px Cambo';
+			this.ctx.fillText(messages[lang].description, GFX_WORD_BOX_OFFSET_X, this.canvas.height * 0.66);
 	}
 	keystroke() { }
 	finalize() { }
@@ -414,7 +451,7 @@ function setup() {
 	usedWords = new Set();
 	pattern = new Pattern(4);
 	words.push(new Word(pattern.beats.length));
-	words.push(new Word('PLAY'));
+	words.push(new Word(messages[lang].play));
 	words.push(new Tutorial());
 }
 
