@@ -1,32 +1,3 @@
-// BUGS
-//		- Scheduled notes are occasionally not being played
-//		- The sync is drifting as BPM increases. The current constant offset is not working.
-//		- The two tonal synths were occasionally crashing... complaining about zeroed time values?
-//		- Long words are going off the edge of the screen
-
-// LATER
-//		- Perfect set, get a life back
-//		- Better looking rests
-//		- More musical complexity
-//			- Shifting melodies, instead of totally new ones
-//			- Multiple drums
-//			- Raise intensity of backing beat as the game progresses
-//			- Look into filters
-//			- More pan, because... y'know... STEREOtype...
-//		- Better word list
-//		- Better difficulty scaling
-//			- Word difficulty
-//				- Corpus frequency
-//				- Left/right alternating...ness
-//				- Repeating letters
-//				- Distance of letters from home row
-//				- A beat at the very beginning and very end is hard
-//			- # of half/third/sixth beat notes
-//			- # of consecutive beats and strictly alternating beats (easier)
-//		- Arbitrarily long words/patterns
-//		- Some reward for perfect words
-//		- Nicer-looking restart
-
 let lang = 'en';
 
 const messages = {
