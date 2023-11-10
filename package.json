@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thquinn/STEREOtype.git"
+    "url": "git+https://github.com/bkarln/STEREOtype.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/thquinn/STEREOtype/issues"
   },
-  "homepage": "https://github.com/thquinn/STEREOtype#readme"
+  "homepage": "https://github.com/bkarln/STEREOtype#readme"
 }

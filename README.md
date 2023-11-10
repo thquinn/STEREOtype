@@ -1,3 +1,7 @@
-
-<img src ="https://imgur.com/dymzFvV.png"/>
-<a href="https://thquinn.itch.io/stereotype"><p align="center">A rhythm/typing game made in 48 hours for Ludum Dare 41</p></a>
+<div>
+  <img src ="https://imgur.com/dymzFvV.png"/>
+  <p align="center">Projeto de manutenção de software UTFPR-DV</p>
+  <a href="https://github.com/thquinn/STEREOtype">
+    <p align="center">Projeto original</p>
+  </a>
+</div>
