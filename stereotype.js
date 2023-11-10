@@ -32,56 +32,7 @@ function updateLanguage(newLang) {
 	setup();
 }
 
-
-
-var canvas = document.getElementById('gameCanvas');
-canvas.width = 1920;
-canvas.height = 1080;
-var ctx = canvas.getContext('2d');
-
-const GAME_AUTOPLAY = false;
-const GAME_PERFECT_OFFSET_SECONDS = .075;
-const GAME_OK_OFFSET_SECONDS = .15;
-const GAME_WORDS_PER_LEVEL = 6;
-const GAME_RESTS_PER_LEVEL = 2;
-const GAME_STARTING_BPM = 120;
-const GAME_BPM_CHANGE_RATE = .02;
-const GAME_MAX_FAILS = 5;
-const GFX_BACKGROUND_COLOR = '#E51D9B';
-const GFX_BACKGROUND_BEAT_COLOR = '#6666FF';
-const GFX_BACKGROUND_GRID_COLOR = '#141520';
-const GFX_BACKGROUND_GRID_ANGLE = 10 * Math.PI / 180;
-const GFX_BACKGROUND_GRID_SPACING = canvas.height / 12;
-const GFX_BACKGROUND_GRID_STROKE = canvas.height / 256;
-const GFX_BACKGROUND_GRID_SCROLL_X = canvas.width / 2000;
-const GFX_BACKGROUND_GRID_SCROLL_Y = -canvas.height / 2000;
-const GFX_BACKGROUND_GRID_BUMP = .05;
-const GFX_WORD_SCALE = .66;
-const GFX_WORD_OFFSET_X = canvas.width * .33;
-const GFX_WORD_BASE_COLOR = '#557380';
-const GFX_WORD_OVER_COLOR = '#EEFAFF';
-const GFX_WORD_UNDERLINE_STROKE = canvas.width / 160;
-const GFX_WORD_UNDERLINE_DASH = canvas.width / 40;
-const GFX_WORD_BOX_STROKE = canvas.width / 128;
-const GFX_WORD_BOX_SCALE = .5;
-const GFX_WORD_BOX_OFFSET_X = GFX_WORD_OFFSET_X - canvas.width * .1;
-const GFX_WORD_BOX_OFFSET_Y = canvas.height * .07;
-const GFX_WORD_BOX_SHIFT_FACTOR = .25;
-const GFX_WORD_BOX_SYMBOL_SCALE = .75;
-const GFX_WORD_BOX_SYMBOL_STROKE = canvas.width / 50;
-const GFX_WORD_BOX_CHECK_COLOR = '#2BFF00';
-const GFX_WORD_BOX_X_COLOR = '#3A083E';
-const GFX_WORD_FLIP_OFFSET_CHANCE = .25;
-const GFX_WORDLINE_OFFSET_Y = canvas.height * -.033;
-const GFX_WORDLINE_PUSHDOWN_FRAMES = 10;
-const GFX_WORDLINE_FADEOUT_RATE = .25;
-const GFX_WORDLINE_LETTER_TWIST_MULTIPLIER = 2;
-const GFX_UI_FONT_SIZE = canvas.height / 20;
-const GFX_UI_PADDING = canvas.height * .03;
-const GFX_UI_FAIL_BOX_SIZE = canvas.height * .033;
-const GFX_UI_FAIL_BOX_STROKE = canvas.height * .005;
-const GFX_UI_FAIL_BOX_SPACING = GFX_UI_FAIL_BOX_SIZE * 1.5;
-const GFX_UI_TIME_SIGNATURE_SCALING = 2;
+var { canvas, GFX_WORD_BASE_COLOR, GFX_WORD_SCALE, GFX_WORD_OFFSET_X, GFX_WORD_UNDERLINE_STROKE, GFX_WORD_UNDERLINE_DASH, GFX_WORD_BOX_SCALE, GFX_WORD_BOX_STROKE, GFX_WORD_BOX_OFFSET_X, GFX_WORD_BOX_OFFSET_Y, GAME_OK_OFFSET_SECONDS, GAME_PERFECT_OFFSET_SECONDS, GFX_WORDLINE_LETTER_TWIST_MULTIPLIER, GFX_WORD_FLIP_OFFSET_CHANCE, GFX_WORD_BOX_SHIFT_FACTOR, GFX_WORD_OVER_COLOR, GAME_AUTOPLAY, GFX_WORD_BOX_SYMBOL_SCALE, GFX_WORD_BOX_CHECK_COLOR, GFX_WORD_BOX_X_COLOR, GFX_WORD_BOX_SYMBOL_STROKE, GAME_STARTING_BPM, GAME_WORDS_PER_LEVEL, GAME_RESTS_PER_LEVEL, GFX_WORDLINE_PUSHDOWN_FRAMES, GFX_WORDLINE_OFFSET_Y, GFX_WORDLINE_FADEOUT_RATE, ctx, GAME_MAX_FAILS, GAME_BPM_CHANGE_RATE, GFX_BACKGROUND_COLOR, GFX_BACKGROUND_BEAT_COLOR, GFX_BACKGROUND_GRID_BUMP, GFX_BACKGROUND_GRID_SCROLL_X, GFX_BACKGROUND_GRID_SPACING, GFX_BACKGROUND_GRID_SCROLL_Y, GFX_BACKGROUND_GRID_COLOR, GFX_BACKGROUND_GRID_STROKE, GFX_BACKGROUND_GRID_ANGLE, GFX_UI_FONT_SIZE, GFX_UI_PADDING, GFX_UI_TIME_SIGNATURE_SCALING, GFX_UI_FAIL_BOX_SIZE, GFX_UI_FAIL_BOX_SPACING, GFX_UI_FAIL_BOX_STROKE } = CanvaGame();
 
 var kick = new Tone.MembraneSynth({
 	'pitchDecay': 0.02,
@@ -154,22 +105,71 @@ Tone.Transport.loop = true;
 var score, words, scale;
 
 
-//this function is called right before the scheduled time
+function CanvaGame() {
+	var canvas = document.getElementById('gameCanvas');
+	canvas.width = 1920;
+	canvas.height = 1080;
+	var ctx = canvas.getContext('2d');
+
+	const GAME_AUTOPLAY = false;
+	const GAME_PERFECT_OFFSET_SECONDS = .075;
+	const GAME_OK_OFFSET_SECONDS = .15;
+	const GAME_WORDS_PER_LEVEL = 6;
+	const GAME_RESTS_PER_LEVEL = 2;
+	const GAME_STARTING_BPM = 120;
+	const GAME_BPM_CHANGE_RATE = .02;
+	const GAME_MAX_FAILS = 5;
+	const GFX_BACKGROUND_COLOR = '#FF7EA1'; // rosa claro
+	const GFX_BACKGROUND_BEAT_COLOR = '#30E1FF'; // Azul claro
+	const GFX_BACKGROUND_GRID_COLOR = '#9039DE'; // roxo
+	const GFX_BACKGROUND_GRID_ANGLE = 10 * Math.PI / 180;
+	const GFX_BACKGROUND_GRID_SPACING = canvas.height / 12;
+	const GFX_BACKGROUND_GRID_STROKE = canvas.height / 256;
+	const GFX_BACKGROUND_GRID_SCROLL_X = canvas.width / 2000;
+	const GFX_BACKGROUND_GRID_SCROLL_Y = -canvas.height / 2000;
+	const GFX_BACKGROUND_GRID_BUMP = .05;
+	const GFX_WORD_SCALE = .66;
+	const GFX_WORD_OFFSET_X = canvas.width * .33;
+	const GFX_WORD_BASE_COLOR = '#8FF287'; // verde claro
+	const GFX_WORD_OVER_COLOR = '#FFFFFF'; // branco
+	const GFX_WORD_UNDERLINE_STROKE = canvas.width / 160;
+	const GFX_WORD_UNDERLINE_DASH = canvas.width / 40;
+	const GFX_WORD_BOX_STROKE = canvas.width / 128;
+	const GFX_WORD_BOX_SCALE = .5;
+	const GFX_WORD_BOX_OFFSET_X = GFX_WORD_OFFSET_X - canvas.width * .1;
+	const GFX_WORD_BOX_OFFSET_Y = canvas.height * .07;
+	const GFX_WORD_BOX_SHIFT_FACTOR = .25;
+	const GFX_WORD_BOX_SYMBOL_SCALE = .75;
+	const GFX_WORD_BOX_SYMBOL_STROKE = canvas.width / 50;
+	const GFX_WORD_BOX_CHECK_COLOR = '#FCE83F'; // amarelo (acerto)
+	const GFX_WORD_BOX_X_COLOR = '#FC3A3E'; // vermelho (erro)
+	const GFX_WORD_FLIP_OFFSET_CHANCE = .25;
+	const GFX_WORDLINE_OFFSET_Y = canvas.height * -.033;
+	const GFX_WORDLINE_PUSHDOWN_FRAMES = 10;
+	const GFX_WORDLINE_FADEOUT_RATE = .25;
+	const GFX_WORDLINE_LETTER_TWIST_MULTIPLIER = 2;
+	const GFX_UI_FONT_SIZE = canvas.height / 20;
+	const GFX_UI_PADDING = canvas.height * .03;
+	const GFX_UI_FAIL_BOX_SIZE = canvas.height * .033;
+	const GFX_UI_FAIL_BOX_STROKE = canvas.height * .005;
+	const GFX_UI_FAIL_BOX_SPACING = GFX_UI_FAIL_BOX_SIZE * 1.5;
+	const GFX_UI_TIME_SIGNATURE_SCALING = 2;
+	return { canvas, GFX_WORD_BASE_COLOR, GFX_WORD_SCALE, GFX_WORD_OFFSET_X, GFX_WORD_UNDERLINE_STROKE, GFX_WORD_UNDERLINE_DASH, GFX_WORD_BOX_SCALE, GFX_WORD_BOX_STROKE, GFX_WORD_BOX_OFFSET_X, GFX_WORD_BOX_OFFSET_Y, GAME_OK_OFFSET_SECONDS, GAME_PERFECT_OFFSET_SECONDS, GFX_WORDLINE_LETTER_TWIST_MULTIPLIER, GFX_WORD_FLIP_OFFSET_CHANCE, GFX_WORD_BOX_SHIFT_FACTOR, GFX_WORD_OVER_COLOR, GAME_AUTOPLAY, GFX_WORD_BOX_SYMBOL_SCALE, GFX_WORD_BOX_CHECK_COLOR, GFX_WORD_BOX_X_COLOR, GFX_WORD_BOX_SYMBOL_STROKE, GAME_STARTING_BPM, GAME_WORDS_PER_LEVEL, GAME_RESTS_PER_LEVEL, GFX_WORDLINE_PUSHDOWN_FRAMES, GFX_WORDLINE_OFFSET_Y, GFX_WORDLINE_FADEOUT_RATE, ctx, GAME_MAX_FAILS, GAME_BPM_CHANGE_RATE, GFX_BACKGROUND_COLOR, GFX_BACKGROUND_BEAT_COLOR, GFX_BACKGROUND_GRID_BUMP, GFX_BACKGROUND_GRID_SCROLL_X, GFX_BACKGROUND_GRID_SPACING, GFX_BACKGROUND_GRID_SCROLL_Y, GFX_BACKGROUND_GRID_COLOR, GFX_BACKGROUND_GRID_STROKE, GFX_BACKGROUND_GRID_ANGLE, GFX_UI_FONT_SIZE, GFX_UI_PADDING, GFX_UI_TIME_SIGNATURE_SCALING, GFX_UI_FAIL_BOX_SIZE, GFX_UI_FAIL_BOX_SPACING, GFX_UI_FAIL_BOX_STROKE };
+}
+// Funções que disparam o som
 function triggerKick(t) {
-	//the time is the sample-accurate time of the event
 	if (score > 0 || words[1].successCheck()) {
 		kick.triggerAttackRelease('C2', '8n', t, 1.5);
 	}
 }
 function triggerFirstMetronome(t) {
-	//the time is the sample-accurate time of the event
 	hat.triggerAttackRelease('C5', '8n', t, .166);
 }
 function triggerMetronome(t) {
-	//the time is the sample-accurate time of the event
 	hat.triggerAttackRelease('C4', '8n', t, .166);
 }
 
+// Classe de padrão musical
 class Pattern {
 	constructor() {
 		this.init();
@@ -177,40 +177,43 @@ class Pattern {
 	}
 
 	init() {
-		this.measureLength = 4;
-		this.beats = [0, 1, 2, 3];
+		this.measureLength = 4; // Comprimento da medida musical
+		this.beats = [0, 1, 2, 3]; // Batidas iniciais
 		this.resetEvents();
 	}
 	resetEvents() {
 		Tone.Transport.cancel();
+		// Configuração dos sons do metrônomo para cada batida
 		for (let i = 0; i < this.measureLength; i++) {
 			Tone.Transport.schedule(i == 0 ? triggerFirstMetronome : triggerMetronome, '0:' + i);
 		}
+		// Configuração dos sons de kick e synth para cada batida
 		for (let i = 0; i < this.beats.length; i++) {
 			let beat = this.beats[i];
 			Tone.Transport.schedule(triggerKick, '0:' + beat);
-			let note = scale[Math.randInt(0, scale.length)] + '3';
+			let note = scale[Math.randInt(0, scale.length)] + '3'; // Gera uma nota aleatória e configura o som do synth
 			Tone.Transport.schedule(function (t) {
 				if (score > 0 || words[1].successCheck()) {
 					synth.triggerAttackRelease(note, '8n', t, .2);
 				}
 			}, '0:' + beat);
 		}
-		let note = scale[Math.randInt(0, scale.length)] + '2';
+		let note = scale[Math.randInt(0, scale.length)] + '2'; // Gera uma nota aleatória e configura o som do baixo
 		Tone.Transport.schedule(function (t) {
 			if (score > 0 || words[1].successCheck()) {
 				bass.triggerAttackRelease(note, Tone.Transport.loopEnd - .25, t, 1.25);
 			}
 		}, '0:0');
 		Tone.Transport.loopEnd = '0:' + this.measureLength;
-		Tone.Transport.schedule(checkLevelUp, Tone.Transport.loopEnd - .01);
+		Tone.Transport.schedule(checkLevelUp, Tone.Transport.loopEnd - .01); // Agendamento da verificação de nível no final da medida
 	}
-
+	// Adiciona uma batida ao padrão
 	addBeat() {
 		this.addBeatHelper();
 		this.beats.sort((a, b) => a - b);
 		this.resetEvents();
 	}
+	// Auxilia para adicionar uma batida única
 	addBeatHelper() {
 		while (true) {
 			let beat = Math.randInt(0, this.measureLength * 2) / 2;
@@ -220,6 +223,7 @@ class Pattern {
 			}
 		}
 	}
+	// Move uma batida existente
 	moveBeat() {
 		let index = Math.randInt(0, this.beats.length);
 		this.addBeatHelper();
@@ -227,6 +231,7 @@ class Pattern {
 		this.beats.sort((a, b) => a - b);
 		this.resetEvents();
 	}
+	// Estende a medida e move uma batida para a nova medida
 	extendMeasureAndMoveBeatToNewMeasure() {
 		let newBeat = this.measureLength + (Math.random() < .5 ? 0 : .5);
 		this.measureLength++;
@@ -236,18 +241,21 @@ class Pattern {
 		this.beats.sort((a, b) => a - b);
 		this.resetEvents();
 	}
+	// Gera batida aleatória
 	randomBeat() {
 		this.beats = randomBeatArray(this.beats.length, this.measureLength);
 		console.log(this.beats);
 		this.resetEvents();
 	}
 }
-
+// Classe que representa uma palavra
 class Word {
+	// O construtor recebe letras ou um número de letras e gera uma palavra aleatória
 	constructor(letters) {
 		if (isNaN(letters)) {
 			this.value = letters.toUpperCase();
 		} else {
+			// Gera uma palavra aleatória do dicionário
 			let tries = 1000;
 			while ((this.value == null || usedWords.has(this.value)) && tries > 0) {
 				this.value = dictionary[lang][letters][Math.randInt(0, dictionary[lang][letters].length - 1)].toUpperCase();
@@ -255,14 +263,16 @@ class Word {
 			}
 			usedWords.add(this.value);
 		}
+		// Inicializa o canvas para exibir a palavra graficamente
 		this.canvas = document.createElement('canvas');
 		this.canvas.width = canvas.width;
 		this.canvas.height = canvas.height / 4;
 		this.ctx = this.canvas.getContext('2d');
-		this.init();
+		this.init(); 
 	}
+
 	init() {
-		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Limpa o canvas
 		this.scores = new Array(this.value.length);
 		this.scores.fill(-1);
 		this.ctx.textAlign = 'left';
@@ -271,21 +281,21 @@ class Word {
 		this.ctx.font = (this.canvas.height * GFX_WORD_SCALE) + 'px Cambo';
 		let midline = this.canvas.height / 2;
 		this.ctx.fillText(this.value, GFX_WORD_OFFSET_X, midline);
-		this.ctx.strokeStyle = GFX_WORD_BASE_COLOR;
+		this.ctx.strokeStyle = GFX_WORD_BASE_COLOR; // Configura o sublinhado
 		this.ctx.lineWidth = GFX_WORD_UNDERLINE_STROKE;
 		this.ctx.setLineDash([GFX_WORD_UNDERLINE_DASH, GFX_WORD_UNDERLINE_DASH]);
 		this.ctx.beginPath();
 		this.ctx.moveTo(GFX_WORD_OFFSET_X, this.canvas.height * .775);
 		this.ctx.lineTo(this.canvas.width * .9625, this.canvas.height * .775);
 		this.ctx.stroke();
-		let boxsize = this.canvas.height * GFX_WORD_BOX_SCALE;
+		let boxsize = this.canvas.height * GFX_WORD_BOX_SCALE; // Configura a caixa ao redor da palavra
 		this.ctx.lineWidth = GFX_WORD_BOX_STROKE;
 		this.ctx.setLineDash([]);
 		this.ctx.strokeRect(GFX_WORD_BOX_OFFSET_X, GFX_WORD_BOX_OFFSET_Y, boxsize, boxsize);
 	}
 
 	keystroke(i, char, offset) {
-		// Prevent overlapping letters.
+		// Impede a sobreposição de letras
 		while (this.scores[i] != -1) {
 			i++;
 			if (i == this.scores.length) {
@@ -293,15 +303,16 @@ class Word {
 			}
 			offset -= pattern.beats[i] - pattern.beats[i - 1];
 		}
-		// Score.
+		// Potuação
 		let offsetSeconds = offset * 60 / Tone.Transport.bpm.value;
+		// Verifica se a tecla digitada está correta e dentro do limite de tempo
 		if (char == this.value[i] && Math.abs(offsetSeconds) <= GAME_OK_OFFSET_SECONDS) {
 			this.scores[i] = 1;
 		} else {
 			this.scores[i] = 0;
 		}
 
-		// Graphics.
+		// Graficos
 		if (Math.abs(offsetSeconds) <= GAME_PERFECT_OFFSET_SECONDS) {
 			offsetSeconds = 0;
 		}
@@ -324,6 +335,7 @@ class Word {
 		this.ctx.restore();
 	}
 
+	// Verifica se a palavra foi digitada corretamente
 	successCheck() {
 		if (GAME_AUTOPLAY) {
 			return true;
@@ -336,6 +348,8 @@ class Word {
 		}
 		return true;
 	}
+
+	// Marca o check-box com acerto ou erro ('V' ou 'X')
 	finalize() {
 		let success = this.successCheck();
 		let boxsize = this.canvas.height * GFX_WORD_BOX_SCALE;
@@ -364,6 +378,7 @@ class Word {
 		return success;
 	}
 }
+// Classe que representa um período de descanso
 class Rest {
 	constructor(measuresLeft) {
 		this.canvas = document.createElement('canvas');
@@ -402,12 +417,13 @@ class Tutorial {
 
 var lastSeconds, pushdownFrames, level, wordsLeft, restsLeft, nextWordsLeft, nextRestsLeft, targetBPM, fails, restartCount, usedWords, pattern;
 
+// Função de configuração do jogo
 function setup() {
-	// PRE-DEFINED VARS
+	// VARIÁVEIS PRÉ-DEFINIDAS
 	score = 0;
 	words = new Array();
 	scale = randomScale();
-	// END PRE-DEFINED VARS
+	// FIM DAS VARIÁVEIS PRÉ-DEFINIDAS
 	Tone.Transport.position = 0;
 	Tone.Transport.bpm.value = GAME_STARTING_BPM;
 	lastSeconds = 0;
@@ -421,6 +437,7 @@ function setup() {
 	restartCount = 0;
 	usedWords = new Set();
 	pattern = new Pattern(4);
+	// Adicionando palavras iniciais ao jogo
 	words.push(new Word(pattern.beats.length));
 	words.push(new Word(messages[lang].play));
 	words.push(new Tutorial());
@@ -431,7 +448,7 @@ function loop() {
 
 	update();
 
-	// Draw.
+	// Desenhando os elementos do jogo
 	updateAndDrawBackground();
 	for (let i = 0; i < 6 && i < words.length; i++) {
 		let row = i;
@@ -461,7 +478,7 @@ function update() {
 	if (fails == GAME_MAX_FAILS) {
 		return;
 	}
-
+	// Ajustando o BPM (batidas por minuto) gradualmente
 	if (Tone.Transport.bpm.value < targetBPM) {
 		Tone.Transport.bpm.value = Math.min(Tone.Transport.bpm.value + GAME_BPM_CHANGE_RATE, targetBPM);
 	}
@@ -507,11 +524,12 @@ function checkLevelUp(t) {
 }
 
 var gridScrollX = 0, gridScrollY = 0;
+// Atualiza o desenhar de fundo com a grade
 function updateAndDrawBackground() {
 	let beatOffset = Math.abs(getClosestBeat(pattern.beats, Tone.Transport.position).offset);
 	let bgColor = GFX_BACKGROUND_COLOR;
 	let scale = 1;
-	if (fails < GAME_MAX_FAILS && beatOffset <= .2 && score > 0) {
+	if (fails < GAME_MAX_FAILS && beatOffset <= .2) {
 		let rgb1 = hexToRgb(GFX_BACKGROUND_COLOR);
 		let rgb2 = hexToRgb(GFX_BACKGROUND_BEAT_COLOR);
 		let t = beatOffset / .2;
@@ -551,13 +569,13 @@ function updateAndDrawBackground() {
 	ctx.restore();
 }
 function drawUI() {
-	// Score.
+	// Pontuação
 	ctx.textAlign = 'left';
 	ctx.textBaseline = 'alphabetic';
 	ctx.fillStyle = GFX_WORD_OVER_COLOR;
 	ctx.font = GFX_UI_FONT_SIZE + 'px Cambo';
 	ctx.fillText('Score: ' + score, GFX_UI_PADDING, canvas.height - GFX_UI_PADDING);
-	// Time signature.
+	// Assinatura de tempo
 	ctx.textBaseline = 'hanging';
 	ctx.font = GFX_UI_FONT_SIZE * .25 * GFX_UI_TIME_SIGNATURE_SCALING + 'px Cambo';
 	ctx.fillText('\u{1D15F} = ' + Math.round(Tone.Transport.bpm.value), GFX_UI_PADDING + GFX_UI_TIME_SIGNATURE_SCALING * 30, GFX_UI_PADDING);
@@ -570,7 +588,7 @@ function drawUI() {
 	ctx.font = GFX_UI_FONT_SIZE * .4 * GFX_UI_TIME_SIGNATURE_SCALING + 'px Cambo';
 	ctx.fillText(pattern.measureLength, GFX_UI_PADDING + GFX_UI_TIME_SIGNATURE_SCALING * 38, clefTop + GFX_UI_TIME_SIGNATURE_SCALING * 12.5);
 	ctx.fillText(4, GFX_UI_PADDING + GFX_UI_TIME_SIGNATURE_SCALING * 38, clefTop + GFX_UI_TIME_SIGNATURE_SCALING * 30);
-	// Fail boxes.
+	// Caixas de falha
 	let failBoxMargin = GFX_UI_FAIL_BOX_SIZE * (1 - GFX_WORD_BOX_SYMBOL_SCALE) / 2;
 	for (let i = 0; i < GAME_MAX_FAILS; i++) {
 		let x = GFX_UI_PADDING + GFX_UI_FAIL_BOX_SPACING * i, y = canvas.height * .875;
@@ -590,7 +608,7 @@ function drawUI() {
 			ctx.stroke();
 		}
 	}
-	// Restart text.
+	// Texto de reinicio
 	if (fails == GAME_MAX_FAILS) {
 		let overText = 'RESTART'.substring(0, restartCount);
 		let baseText = 'RESTART'.substring(restartCount, 7);
@@ -606,6 +624,7 @@ function drawUI() {
 
 function levelUp() {
 	level++;
+	// Define os eventos para cada nível
 	if (level == 1) {
 		pattern.addBeat();
 	} else if (level == 2) {
@@ -653,9 +672,9 @@ function levelUp() {
 }
 
 const typedLetters = [];
-const typedLettersDiv = document.getElementById('typed-letters'); // Elemento HTML para exibir as letras digitadas
-const wordDisplayDiv = document.getElementById('word-display'); // Elemento HTML para exibir a palavra
-const sound = new Tone.Synth().toDestination(); // Substitua Synth por outro instrumento se desejar
+const typedLettersDiv = document.getElementById('typed-letters'); 
+const wordDisplayDiv = document.getElementById('word-display'); 
+const sound = new Tone.Synth().toDestination(); 
 
 window.addEventListener('keydown', function (e) {
 	if (e.keyCode < 65 || e.keyCode > 90)
@@ -676,27 +695,26 @@ window.addEventListener('keydown', function (e) {
 		word.keystroke(beat.beat, char, beat.offset);
 		typedLetters.push(char);
 
-		// Atualiza o conteúdo do elemento HTML para exibir as letras digitadas.
+		// Exibe as letras digitadas.
 		if (typedLettersDiv) {
 			typedLettersDiv.textContent = typedLetters.join(' ');
 		}
 
-		// Atualiza o conteúdo do elemento HTML para exibir a palavra atual.
+		// Exibe a palavra atual.
 		if (wordDisplayDiv) {
-			wordDisplayDiv.textContent = word; // Atualiza para a palavra correta
+			wordDisplayDiv.textContent = word; 
 		}
 		// Toca o mesmo som para todas as teclas pressionadas.
-		sound.triggerAttackRelease('C2', '8n'); // Configure a nota e duração desejadas.
+		sound.triggerAttackRelease('C2', '8n'); 
 	}
 });
 
-// Função para mostrar o botão de "restart"
+// Função para mostrar botão de "restart"
 function showRestartButton() {
 	const restartButton = document.getElementById('restart-button');
 	restartButton.style.display = 'block';
   }
   
-  // Verifica se o jogador perdeu e chame a função para mostrar o botão de "restart" 
   if (jogadorPerdeu) {
 	showRestartButton();
   }
@@ -704,7 +722,7 @@ function showRestartButton() {
   // Adiciona um manipulador de eventos ao botão de "restart"
   const restartButton = document.getElementById('restart-button');
   restartButton.addEventListener('click', () => {
-	// ## Adicionar aqui o código para reiniciar o jogo ##
+	// ## Código para reiniciar o jogo ##
   });
 
 
