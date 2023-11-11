@@ -1,10 +1,15 @@
+// Gera um número aleatório.
 Math.randFloat = function (min, max) {
   return Math.random() * (max - min) + min;
 };
+
+// Gera um número inteiro.
 Math.randInt = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 };
-Math.randInts = function(min, max, n) {
+
+// Gera um array de inteiros únicos.
+Math.randInts = function (min, max, n) {
   let s = new Set();
   while (s.size < n) {
     s.add(Math.randInt(min, max));
@@ -12,38 +17,43 @@ Math.randInts = function(min, max, n) {
   let a = Array.from(s);
   a.sort((a, b) => a - b);
   return a;
-}
+};
+
+// Limita um valor a um intervalo específico.
 Math.clamp = function (min, val, max) {
   return Math.min(Math.max(val, min), max);
-}
-// from http://www.gizma.com/easing/
+};
+
+// Função de interpolação com suavização, easing.
 Math.easeInOutQuad = function (t, b, c, d) {
-  t /= d/2;
-  if (t < 1) return c/2*t*t + b;
+  t /= d / 2;
+  if (t < 1) return c / 2 * t * t + b;
   t--;
-  return -c/2 * (t*(t-2) - 1) + b;
+  return -c / 2 * (t * (t - 2) - 1) + b;
 };
 
-Array.prototype.shuffle = function() {
+// Embaralha aleatoriamente os elementos de um array.
+Array.prototype.shuffle = function () {
   var j, x, i;
-    for (i = this.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        x = this[i];
-        this[i] = this[j];
-        this[j] = x;
-    }
+  for (i = this.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1));
+    x = this[i];
+    this[i] = this[j];
+    this[j] = x;
+  }
 };
 
-// from Tim Down on StackOverflow
+// Converte uma cor hexadecimal em um objeto RGB.
 function hexToRgb(hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
 }
 
+// Gerar um array de batidas (beats) aleatórias em uma medida musical.
 function randomBeatArray(notes, measureLength) {
   let allPositions = [];
   for (let i = 0; i < measureLength; i++) {
@@ -56,6 +66,7 @@ function randomBeatArray(notes, measureLength) {
   return allPositions;
 }
 
+// Encontrar a batida mais próxima em um array de batidas.
 function getClosestBeat(beats, val) {
   let valTokens = val.split(':');
   val = Number(valTokens[0]) * 4 + Number(valTokens[1]) + Number(valTokens[2]) / 4;
@@ -72,6 +83,7 @@ function getClosestBeat(beats, val) {
   return { beat: bestI, offset: bestDelta };
 }
 
+// Gera uma escala musical aleatória.
 function randomScale() {
   let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
   notes = notes.concat(notes);
